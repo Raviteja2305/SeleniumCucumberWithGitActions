@@ -1,4 +1,4 @@
-Feature: Selenium Cucumber with Git Actions 
+Feature: Selenium Cucumber with Git Actions Learning 
 
 Scenario Outline: Git Actions with Cucumber Framework 
 
