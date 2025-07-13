@@ -9,46 +9,41 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 🧾 Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: ☕ Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Debug - Check if feature files exist
-        run: |
-          echo "🔍 Looking for feature files..."
-          find src/test/resources/features -name "*.feature" || echo "❌ No feature files found!"
+      - name: 🛠️ Run Tests & Generate Report
+        run: mvn clean verify
 
-      - name: Build with Maven
-        run: mvn clean test
-
-      - name: Debug - List contents of target folder
+      - name: 📂 Debug - List contents of target folder
         run: |
-          echo "📁 Listing target folder..."
+          echo "📁 Contents of /target:"
           ls -R target || echo "❌ target folder not found"
 
-      - name: Debug - Check if Cucumber HTML report was generated
+      - name: 📊 Check Cucumber HTML report
         run: |
-          echo "📂 Checking for target/cucumber-html-report..."
+          echo "🔍 Looking for Cucumber HTML report..."
           if [ -d target/cucumber-html-report ]; then
             echo "✅ Report found:"
             ls -R target/cucumber-html-report
           else
-            echo "❌ Cucumber report not found!"
+            echo "❌ Report not found!"
             exit 1
           fi
 
-      - name: Upload report as artifact (for private repos)
+      - name: 📎 Upload report artifact (optional, for private repos)
         uses: actions/upload-artifact@v4
         with:
           name: cucumber-report
           path: target/cucumber-html-report
 
-      - name: Deploy report to GitHub Pages
+      - name: 🚀 Deploy report to GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v3
         with:
