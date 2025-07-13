@@ -18,32 +18,21 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 🧪 Run tests & generate report
-        run: mvn clean verify
+      - name: 🧪 Run tests with forced JSON output
+        run: mvn clean verify -Dcucumber.plugin="pretty,json:target/cucumber-report.json"
 
-      - name: ✅ Validate JSON output
+      - name: 🛠 Debug: Check if cucumber-report.json exists
         run: |
-          if [ ! -s target/cucumber-report.json ]; then
-            echo "❌ JSON report is missing or empty!"
-            exit 1
+          echo "Checking if JSON report exists..."
+          if [ -f target/cucumber-report.json ]; then
+            echo "✅ JSON found!"
+            cat target/cucumber-report.json
           else
-            echo "✅ JSON report is ready!"
-          fi
-
-      - name: 📁 List contents of target folder
-        run: ls -R target
-
-      - name: 📂 Check Cucumber HTML report
-        run: |
-          if [ -d target/cucumber-html-report ]; then
-            echo "✅ Report generated!"
-            ls -R target/cucumber-html-report
-          else
-            echo "❌ HTML report folder not found!"
+            echo "❌ JSON NOT FOUND!"
             exit 1
           fi
 
-      - name: 📎 Upload report artifact
+      - name: 📎 Upload Cucumber HTML report
         uses: actions/upload-artifact@v4
         with:
           name: cucumber-report
