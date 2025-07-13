@@ -21,22 +21,31 @@ jobs:
       - name: 🔄 Clean target folder
         run: rm -rf target
 
-      - name: 🛠️ Run Tests & Generate Report
-        run: mvn clean verify
+      - name: 🧪 Run tests & generate JSON report
+        run: mvn clean test
 
-      - name: 📂 Debug - List contents of target folder
+      - name: ✅ Validate JSON output before HTML generation
         run: |
-          echo "📁 Contents of /target:"
-          ls -R target || echo "❌ target folder not found"
+          if [ ! -s target/cucumber-report.json ]; then
+            echo "❌ JSON report is missing or empty!"
+            exit 1
+          else
+            echo "✅ JSON report is ready!"
+          fi
 
-      - name: 📊 Check Cucumber HTML report
+      - name: 📊 Generate Cucumber HTML report
+        run: mvn verify
+
+      - name: 📁 List contents of target folder
+        run: ls -R target
+
+      - name: 📂 Check Cucumber HTML report
         run: |
-          echo "🔍 Looking for Cucumber HTML report..."
           if [ -d target/cucumber-html-report ]; then
-            echo "✅ Report found:"
+            echo "✅ Report generated!"
             ls -R target/cucumber-html-report
           else
-            echo "❌ Report not found!"
+            echo "❌ HTML report folder not found!"
             exit 1
           fi
 
