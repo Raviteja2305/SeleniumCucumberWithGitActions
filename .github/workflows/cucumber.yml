@@ -38,7 +38,7 @@ jobs:
       - name: 📊 Generate Cucumber HTML report
         run: mvn verify
 
-      - name: 🪄 Create redirect index.html and prepare Pages folder
+      - name: 🪄 Flatten report folder & create index.html redirect
         run: |
           mkdir gh-pages
           cp -r target/cucumber-html-reports/* gh-pages/
