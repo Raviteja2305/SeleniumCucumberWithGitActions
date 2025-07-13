@@ -21,8 +21,24 @@ jobs:
       - name: Build with Maven
         run: mvn clean test
 
+      - name: Debug - Check if report was generated
+        run: |
+          if [ -d target/cucumber-html-report ]; then
+            echo "✅ Report generated:"
+            ls -R target/cucumber-html-report
+          else
+            echo "❌ Cucumber report not found!"
+            exit 1
+          fi
+
+      - name: Upload report as artifact (for private repos)
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report
+          path: target/cucumber-html-report
+
       - name: Deploy report to GitHub Pages
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
