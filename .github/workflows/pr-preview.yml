@@ -5,7 +5,7 @@ on:
     types: [opened, synchronize, reopened, closed]
 
 jobs:
-  deploy-preview:
+  pr-preview:
     runs-on: ubuntu-latest
     concurrency:
       group: preview-${{ github.ref }}
@@ -21,10 +21,17 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: 🔄 Clean target folder
+        run: rm -rf target
+
       - name: 🧪 Run tests & generate report
         run: |
           mvn clean test
           mvn verify
+
+      - name: 📂 Add redirect index.html to report folder
+        run: |
+          echo '<html><head><meta http-equiv="refresh" content="0; URL=report-feature_1773788758.html" /></head><body></body></html>' > target/cucumber-html-reports/index.html
 
       - name: 🚀 Deploy PR preview
         uses: rossjrw/pr-preview-action@v1
