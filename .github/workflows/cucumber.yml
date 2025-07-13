@@ -18,13 +18,20 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Debug - Check if test runner exists
+        run: |
+          echo "🔍 Looking for CucumberTest.java"
+          find src/test/java -name "CucumberTest.java" || echo "❌ Runner not found!"
+
       - name: Debug - Check if feature files exist
         run: |
-          echo "🔍 Looking for .feature files..."
+          echo "🔍 Looking for feature files..."
           find src/test/resources/features -name "*.feature" || echo "❌ No feature files found!"
 
-      - name: Build with Maven
-        run: mvn clean test
+      - name: Build with Maven (force test runner)
+        run: |
+          echo "🚀 Running tests..."
+          mvn clean test -Dtest=runner.CucumberTest
 
       - name: Debug - Check if Cucumber HTML report was generated
         run: |
