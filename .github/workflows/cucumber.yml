@@ -42,7 +42,7 @@ jobs:
         run: |
           mkdir -p gh-pages
           cp -r target/cucumber-html-reports/* gh-pages/
-          echo '<html><head><meta http-equiv="refresh" content="0; URL=report-feature_1773788758.html" /></head><body></body></html>' > gh-pages/index.html
+          echo '<html><head><meta http-equiv="refresh" content="0; URL=cucumber-html-reports/report-feature_1773788758.html" /></head><body></body></html>' > gh-pages/index.html
           echo > gh-pages/.nojekyll
           ls -R gh-pages  # ✅ List final structure to verify during workflow
 
