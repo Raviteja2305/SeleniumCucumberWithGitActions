@@ -28,10 +28,15 @@ jobs:
           echo "🔍 Looking for feature files..."
           find src/test/resources/features -name "*.feature" || echo "❌ No feature files found!"
 
-      - name: Build with Maven (force test runner)
+      - name: Build with Maven
         run: |
           echo "🚀 Running tests..."
-          mvn clean test -Dtest=runner.CucumberTest
+          mvn clean test
+
+      - name: Debug - List contents of target folder
+        run: |
+          echo "📂 Listing contents of target/"
+          ls -R target || echo "❌ No target folder found!"
 
       - name: Debug - Check if Cucumber HTML report was generated
         run: |
