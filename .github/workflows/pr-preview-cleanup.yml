@@ -7,9 +7,13 @@ on:
 jobs:
   delete-preview:
     runs-on: ubuntu-latest
+
     steps:
-      - name: 🧹 Delete preview
+      - name: 🧾 Checkout repo
+        uses: actions/checkout@v4
+
+      - name: 🧹 Delete PR preview folder
         uses: rossjrw/pr-preview-action@v1
         with:
-          source-dir: target/cucumber-html-reports
+          source-dir: pr-preview
           action: remove
