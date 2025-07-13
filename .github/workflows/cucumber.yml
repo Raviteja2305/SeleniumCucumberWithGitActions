@@ -38,33 +38,27 @@ jobs:
       - name: 📊 Generate Cucumber HTML report
         run: mvn verify
 
-      - name: 🧪 Create index.html redirect
+      - name: 🪄 Create index.html redirect
         run: echo '<html><head><meta http-equiv="refresh" content="0; URL=overview-features.html" /></head><body></body></html>' > target/cucumber-html-reports/index.html
 
       - name: 🛑 Disable Jekyll for GitHub Pages
         run: echo > target/cucumber-html-reports/.nojekyll
 
-      - name: 📂 Check Cucumber HTML report folder
+      - name: 📁 Prepare GitHub Pages folder
         run: |
-          echo "📁 Checking for cucumber-html-reports folder..."
-          if [ -d target/cucumber-html-reports ]; then
-            echo "✅ Report generated!"
-            ls -R target/cucumber-html-reports
-          else
-            echo "❌ HTML report folder not found!"
-            exit 1
-          fi
+          mkdir gh-pages
+          cp -r target/cucumber-html-reports/* gh-pages/
 
       - name: 📎 Upload report artifact
         uses: actions/upload-artifact@v4
         with:
           name: cucumber-report
-          path: target/cucumber-html-reports
+          path: gh-pages
 
       - name: 🚀 Deploy report to GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/cucumber-html-reports
+          publish_dir: ./gh-pages
           publish_branch: gh-pages
