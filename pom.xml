@@ -2,12 +2,10 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>www.SeleniumCucumberGitActions.com</groupId>
 	<artifactId>SeleniumCucumberGitActions</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-
 	<dependencies>
 		<dependency>
 			<groupId>io.cucumber</groupId>
@@ -27,7 +25,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
 			<!-- Runs Cucumber test runner -->
@@ -41,7 +38,6 @@
 					</includes>
 				</configuration>
 			</plugin>
-
 			<!-- Generates Cucumber HTML report -->
 			<plugin>
 				<groupId>net.masterthought</groupId>
@@ -56,10 +52,11 @@
 						</goals>
 						<configuration>
 							<projectName>SeleniumCucumberGitActions</projectName>
+							<outputDirectory>${project.build.directory}/cucumber-report-html</outputDirectory>
+							<inputDirectory>${project.build.directory}</inputDirectory>
 							<jsonFiles>
-								<param>target/cucumber-report.json</param>
+								<param>cucumber-report.json</param>
 							</jsonFiles>
-							<outputDirectory>target/cucumber-html-report</outputDirectory>
 						</configuration>
 					</execution>
 				</executions>

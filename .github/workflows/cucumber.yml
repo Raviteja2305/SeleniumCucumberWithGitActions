@@ -26,6 +26,7 @@ jobs:
 
       - name: 🔎 Validate JSON report
         run: |
+          echo "📄 Checking for cucumber-report.json..."
           if [ ! -s target/cucumber-report.json ]; then
             echo "❌ JSON report is missing or empty!"
             exit 1
@@ -34,16 +35,14 @@ jobs:
             head -n 10 target/cucumber-report.json
           fi
 
-      - name: 📊 Generate HTML report
+      - name: 📊 Generate Cucumber HTML report
         run: mvn verify
 
-      - name: 📁 List contents of target folder
-        run: ls -R target
-
-      - name: 📂 Check Cucumber HTML report
+      - name: 📂 Check HTML report directory
         run: |
+          echo "📁 Checking for cucumber-report-html folder..."
           if [ -d target/cucumber-report-html ]; then
-            echo "✅ HTML report folder found:"
+            echo "✅ Report generated!"
             ls -R target/cucumber-report-html
           else
             echo "❌ HTML report folder not found!"
