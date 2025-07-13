@@ -24,7 +24,7 @@ jobs:
       - name: 🧪 Run tests & generate JSON report
         run: mvn clean test
 
-      - name: ✅ Validate JSON output before HTML generation
+      - name: ✅ Validate JSON output
         run: |
           if [ ! -s target/cucumber-report.json ]; then
             echo "❌ JSON report is missing or empty!"
