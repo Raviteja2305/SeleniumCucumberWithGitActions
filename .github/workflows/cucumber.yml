@@ -1,9 +1,8 @@
 name: Run Cucumber Tests & Publish Report
 
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
   workflow_dispatch:
+  pull_request:
 
 jobs:
   test:
@@ -38,18 +37,12 @@ jobs:
       - name: 📊 Generate Cucumber HTML report
         run: mvn verify
 
-      - name: 🪄 Prepare GitHub Pages folder with report
+      - name: 🪄 Create redirect index.html
         run: |
-          mkdir -p gh-pages
-          if [ -d target/cucumber-html-reports ]; then
-            cp -r target/cucumber-html-reports/* gh-pages/
-            echo '<html><head><meta http-equiv="refresh" content="0; URL=report-feature_1773788758.html" /></head><body></body></html>' > gh-pages/index.html
-            echo > gh-pages/.nojekyll
-            echo "✅ Report copied and index.html created."
-          else
-            echo "❌ Report folder not found. Skipping deployment."
-            exit 1
-          fi
+          mkdir gh-pages
+          cp -r target/cucumber-html-reports gh-pages/
+          echo '<html><head><meta http-equiv="refresh" content="0; URL=cucumber-html-reports/report-feature_1773788758.html" /></head><body></body></html>' > gh-pages/index.html
+          echo > gh-pages/.nojekyll
 
       - name: 📦 Upload report artifact
         uses: actions/upload-artifact@v4
