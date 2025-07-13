@@ -24,16 +24,18 @@ jobs:
       - name: 🔄 Clean target folder
         run: rm -rf target
 
-      - name: 🧪 Run tests & generate report
+      - name: 🧪 Run tests & generate HTML report
         run: |
           mvn clean test
           mvn verify
 
-      - name: 📂 Add redirect index.html to report folder
+      - name: 🪄 Flatten report folder for PR preview
         run: |
-          echo '<html><head><meta http-equiv="refresh" content="0; URL=report-feature_1773788758.html" /></head><body></body></html>' > target/cucumber-html-reports/index.html
+          mkdir -p pr-preview
+          cp -r target/cucumber-html-reports/* pr-preview/
+          echo '<html><head><meta http-equiv="refresh" content="0; URL=report-feature_1773788758.html" /></head><body></body></html>' > pr-preview/index.html
 
       - name: 🚀 Deploy PR preview
         uses: rossjrw/pr-preview-action@v1
         with:
-          source-dir: target/cucumber-html-reports
+          source-dir: pr-preview
