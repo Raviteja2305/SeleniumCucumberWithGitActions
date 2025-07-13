@@ -13,6 +13,6 @@ import io.cucumber.junit.CucumberOptions;
 										"json:target/cucumber-report.json",
 										"junit:target/reports/Cucumber.xml",
 										"rerun:target/failed.txt"})
-public class TestRunner {
+public class CucumberTest {
 
 }
