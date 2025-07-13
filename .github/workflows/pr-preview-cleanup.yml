@@ -1,0 +1,15 @@
+name: Delete PR Preview
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  delete-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🧹 Delete preview
+        uses: rossjrw/pr-preview-action@v1
+        with:
+          source-dir: target/cucumber-html-reports
+          action: remove
