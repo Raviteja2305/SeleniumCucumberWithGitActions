@@ -26,23 +26,22 @@ jobs:
 
       - name: 🔎 Validate JSON report
         run: |
-          echo "📄 Checking for cucumber-report.json..."
           if [ ! -s target/cucumber-report.json ]; then
             echo "❌ JSON report is missing or empty!"
             exit 1
           else
-            echo "✅ JSON report is ready:"
+            echo "✅ JSON report found:"
             head -n 10 target/cucumber-report.json
           fi
 
       - name: 📊 Generate Cucumber HTML report
         run: mvn verify
 
-      - name: 📁 Prepare GitHub Pages folder
+      - name: 🪄 Create redirect index.html
         run: |
           mkdir gh-pages
-          cp -r target/cucumber-html-reports/* gh-pages/
-          echo '<html><head><meta http-equiv="refresh" content="0; URL=report-feature_1773788758.html" /></head><body></body></html>' > gh-pages/index.html
+          cp -r target/cucumber-html-reports gh-pages/
+          echo '<html><head><meta http-equiv="refresh" content="0; URL=cucumber-html-reports/report-feature_1773788758.html" /></head><body></body></html>' > gh-pages/index.html
           echo > gh-pages/.nojekyll
 
       - name: 📦 Upload report artifact
