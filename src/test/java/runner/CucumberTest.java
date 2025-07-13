@@ -9,7 +9,7 @@ import io.cucumber.junit.CucumberOptions;
 @CucumberOptions(features = "src/test/resources/features",
 					glue = "stepDefs",
 					monochrome = true,
-					plugin = {"pretty", "html:target/cucumber-html-report",
+					plugin = {"pretty", "html:target/cucumber-html-output",
 										"json:target/cucumber-report.json",
 										"junit:target/reports/Cucumber.xml",
 										"rerun:target/failed.txt"})
