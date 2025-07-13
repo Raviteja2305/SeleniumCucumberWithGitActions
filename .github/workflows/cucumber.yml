@@ -18,6 +18,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: 🔄 Clean target folder
+        run: rm -rf target
+
       - name: 🛠️ Run Tests & Generate Report
         run: mvn clean verify
 
@@ -37,7 +40,7 @@ jobs:
             exit 1
           fi
 
-      - name: 📎 Upload report artifact (optional, for private repos)
+      - name: 📎 Upload report artifact
         uses: actions/upload-artifact@v4
         with:
           name: cucumber-report
