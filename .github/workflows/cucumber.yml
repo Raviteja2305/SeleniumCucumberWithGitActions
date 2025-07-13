@@ -38,27 +38,33 @@ jobs:
       - name: 📊 Generate Cucumber HTML report
         run: mvn verify
 
-      - name: 📂 Check HTML report directory
+      - name: 📁 List contents of target folder
+        run: ls -R target
+
+      - name: 📂 Check Cucumber HTML report folder
         run: |
-          echo "📁 Checking for cucumber-report-html folder..."
-          if [ -d target/cucumber-report-html ]; then
+          echo "📁 Checking for cucumber-html-reports folder..."
+          if [ -d target/cucumber-html-reports ]; then
             echo "✅ Report generated!"
-            ls -R target/cucumber-report-html
+            ls -R target/cucumber-html-reports
           else
             echo "❌ HTML report folder not found!"
             exit 1
           fi
 
-      - name: 📎 Upload HTML report artifact
+      - name: 📎 Upload report artifact
         uses: actions/upload-artifact@v4
         with:
           name: cucumber-report
-          path: target/cucumber-report-html
+          path: target/cucumber-html-reports
+
+      - name: 🛑 Disable Jekyll for GitHub Pages
+        run: echo > target/cucumber-html-reports/.nojekyll
 
       - name: 🚀 Deploy report to GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/cucumber-report-html
+          publish_dir: ./target/cucumber-html-reports
           publish_branch: gh-pages
