@@ -40,10 +40,11 @@ jobs:
 
       - name: 🪄 Prepare GitHub Pages folder
         run: |
-          mkdir -p gh-pages/cucumber-html-reports
-          cp -r target/cucumber-html-reports/* gh-pages/cucumber-html-reports/
-          echo '<html><head><meta http-equiv="refresh" content="0; URL=cucumber-html-reports/report-feature_1773788758.html" /></head><body></body></html>' > gh-pages/index.html
+          mkdir -p gh-pages
+          cp -r target/cucumber-html-reports/* gh-pages/
+          echo '<html><head><meta http-equiv="refresh" content="0; URL=report-feature_1773788758.html" /></head><body></body></html>' > gh-pages/index.html
           echo > gh-pages/.nojekyll
+          ls -R gh-pages  # ✅ List final structure to verify during workflow
 
       - name: 📦 Upload report artifact
         uses: actions/upload-artifact@v4
