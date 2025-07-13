@@ -1,8 +1,9 @@
 name: Run Cucumber Tests & Publish Report
 
 on:
+  pull_request:
+    types: [opened, synchronize, reopened]
   workflow_dispatch:
-  pull_request:  
 
 jobs:
   test:
@@ -26,19 +27,18 @@ jobs:
 
       - name: 🔎 Validate JSON report
         run: |
-          echo "📄 Checking for cucumber-report.json..."
           if [ ! -s target/cucumber-report.json ]; then
             echo "❌ JSON report is missing or empty!"
             exit 1
           else
-            echo "✅ JSON report is ready:"
+            echo "✅ JSON report found:"
             head -n 10 target/cucumber-report.json
           fi
 
       - name: 📊 Generate Cucumber HTML report
         run: mvn verify
 
-      - name: 📁 Prepare GitHub Pages folder
+      - name: 🪄 Create redirect index.html and prepare Pages folder
         run: |
           mkdir gh-pages
           cp -r target/cucumber-html-reports/* gh-pages/
