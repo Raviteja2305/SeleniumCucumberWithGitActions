@@ -3,6 +3,7 @@ name: Run Cucumber Tests & Publish Report
 on:
   workflow_dispatch:
   pull_request:
+    types: [opened, synchronize, reopened]
 
 jobs:
   test:
@@ -37,10 +38,10 @@ jobs:
       - name: 📊 Generate Cucumber HTML report
         run: mvn verify
 
-      - name: 🪄 Create redirect index.html
+      - name: 🪄 Prepare GitHub Pages folder
         run: |
-          mkdir gh-pages
-          cp -r target/cucumber-html-reports gh-pages/
+          mkdir -p gh-pages/cucumber-html-reports
+          cp -r target/cucumber-html-reports/* gh-pages/cucumber-html-reports/
           echo '<html><head><meta http-equiv="refresh" content="0; URL=cucumber-html-reports/report-feature_1773788758.html" /></head><body></body></html>' > gh-pages/index.html
           echo > gh-pages/.nojekyll
 
