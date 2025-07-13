@@ -38,8 +38,11 @@ jobs:
       - name: 📊 Generate Cucumber HTML report
         run: mvn verify
 
-      - name: 📁 List contents of target folder
-        run: ls -R target
+      - name: 🧪 Create index.html redirect
+        run: echo '<html><head><meta http-equiv="refresh" content="0; URL=overview-features.html" /></head><body></body></html>' > target/cucumber-html-reports/index.html
+
+      - name: 🛑 Disable Jekyll for GitHub Pages
+        run: echo > target/cucumber-html-reports/.nojekyll
 
       - name: 📂 Check Cucumber HTML report folder
         run: |
@@ -57,9 +60,6 @@ jobs:
         with:
           name: cucumber-report
           path: target/cucumber-html-reports
-
-      - name: 🛑 Disable Jekyll for GitHub Pages
-        run: echo > target/cucumber-html-reports/.nojekyll
 
       - name: 🚀 Deploy report to GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
