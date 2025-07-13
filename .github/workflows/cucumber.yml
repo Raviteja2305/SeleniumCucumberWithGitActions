@@ -18,30 +18,48 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 🧪 Run tests with forced JSON output
-        run: mvn clean verify -Dcucumber.plugin="pretty,json:target/cucumber-report.json"
+      - name: 🔄 Clean target folder
+        run: rm -rf target
 
-      - name: 🛠 Debug: Check if cucumber-report.json exists
+      - name: 🧪 Run tests & generate JSON report
+        run: mvn clean test
+
+      - name: 🔎 Validate JSON report
         run: |
-          echo "Checking if JSON report exists..."
-          if [ -f target/cucumber-report.json ]; then
-            echo "✅ JSON found!"
-            cat target/cucumber-report.json
+          if [ ! -s target/cucumber-report.json ]; then
+            echo "❌ JSON report is missing or empty!"
+            exit 1
           else
-            echo "❌ JSON NOT FOUND!"
+            echo "✅ JSON report is ready:"
+            head -n 10 target/cucumber-report.json
+          fi
+
+      - name: 📊 Generate HTML report
+        run: mvn verify
+
+      - name: 📁 List contents of target folder
+        run: ls -R target
+
+      - name: 📂 Check Cucumber HTML report
+        run: |
+          if [ -d target/cucumber-report-html ]; then
+            echo "✅ HTML report folder found:"
+            ls -R target/cucumber-report-html
+          else
+            echo "❌ HTML report folder not found!"
             exit 1
           fi
 
-      - name: 📎 Upload Cucumber HTML report
+      - name: 📎 Upload HTML report artifact
         uses: actions/upload-artifact@v4
         with:
           name: cucumber-report
-          path: target/cucumber-html-report
+          path: target/cucumber-report-html
 
       - name: 🚀 Deploy report to GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/cucumber-html-report
+          publish_dir: ./target/cucumber-report-html
           publish_branch: gh-pages
