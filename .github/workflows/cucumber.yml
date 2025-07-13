@@ -18,11 +18,8 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 🔄 Clean target folder
-        run: rm -rf target
-
-      - name: 🧪 Run tests & generate JSON report
-        run: mvn clean test
+      - name: 🧪 Run tests & generate report
+        run: mvn clean verify
 
       - name: ✅ Validate JSON output
         run: |
@@ -32,9 +29,6 @@ jobs:
           else
             echo "✅ JSON report is ready!"
           fi
-
-      - name: 📊 Generate Cucumber HTML report
-        run: mvn verify
 
       - name: 📁 List contents of target folder
         run: ls -R target
