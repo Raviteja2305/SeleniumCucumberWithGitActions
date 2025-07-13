@@ -9,38 +9,56 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: 🧾 Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: ☕ Set up Java
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Build with Maven
+      - name: 🔄 Clean target folder
+        run: rm -rf target
+
+      - name: 🧪 Run tests & generate JSON report
         run: mvn clean test
 
-      - name: Debug - Check if report was generated
+      - name: 🔎 Validate JSON report
         run: |
-          if [ -d target/cucumber-html-report ]; then
-            echo "✅ Report generated:"
-            ls -R target/cucumber-html-report
+          echo "📄 Checking for cucumber-report.json..."
+          if [ ! -s target/cucumber-report.json ]; then
+            echo "❌ JSON report is missing or empty!"
+            exit 1
           else
-            echo "❌ Cucumber report not found!"
+            echo "✅ JSON report is ready:"
+            head -n 10 target/cucumber-report.json
+          fi
+
+      - name: 📊 Generate Cucumber HTML report
+        run: mvn verify
+
+      - name: 📂 Check HTML report directory
+        run: |
+          echo "📁 Checking for cucumber-report-html folder..."
+          if [ -d target/cucumber-report-html ]; then
+            echo "✅ Report generated!"
+            ls -R target/cucumber-report-html
+          else
+            echo "❌ HTML report folder not found!"
             exit 1
           fi
 
-      - name: Upload report as artifact (for private repos)
+      - name: 📎 Upload HTML report artifact
         uses: actions/upload-artifact@v4
         with:
           name: cucumber-report
-          path: target/cucumber-html-report
+          path: target/cucumber-report-html
 
-      - name: Deploy report to GitHub Pages
+      - name: 🚀 Deploy report to GitHub Pages
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./target/cucumber-html-report
+          publish_dir: ./target/cucumber-report-html
           publish_branch: gh-pages
