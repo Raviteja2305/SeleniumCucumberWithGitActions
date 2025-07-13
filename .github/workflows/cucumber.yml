@@ -18,13 +18,19 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Debug - Check if feature files exist
+        run: |
+          echo "🔍 Looking for .feature files..."
+          find src/test/resources/features -name "*.feature" || echo "❌ No feature files found!"
+
       - name: Build with Maven
         run: mvn clean test
 
-      - name: Debug - Check if report was generated
+      - name: Debug - Check if Cucumber HTML report was generated
         run: |
+          echo "📂 Checking for target/cucumber-html-report..."
           if [ -d target/cucumber-html-report ]; then
-            echo "✅ Report generated:"
+            echo "✅ Report found:"
             ls -R target/cucumber-html-report
           else
             echo "❌ Cucumber report not found!"
